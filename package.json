@@ -1,0 +1,31 @@
+{
+  "name": "sensor-dashboard",
+  "version": "1.0.0",
+  "description": "Ứng dụng quản lý dữ liệu cảm biến với MQTT, Socket.io và MongoDB",
+  "main": "server.js",
+  "scripts": {
+    "start": "nodemon server.js",
+    "dev": "nodemon server.js"
+  },
+  "keywords": [
+    "mqtt",
+    "socket.io",
+    "express",
+    "mongodb",
+    "sensor",
+    "dashboard"
+  ],
+  "author": "Tên của bạn",
+  "license": "ISC",
+  "dependencies": {
+    "dotenv": "^16.0.3",
+    "express": "^4.18.2",
+    "http": "^0.0.1-security",
+    "mongoose": "^7.2.2",
+    "mqtt": "^4.3.7",
+    "socket.io": "^4.7.2"
+  },
+  "devDependencies": {
+    "nodemon": "^3.0.1"
+  }
+}

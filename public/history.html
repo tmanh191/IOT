@@ -1,0 +1,197 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Action History</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6.4.0 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- DataTables CSS -->
+  <link rel="stylesheet" href="https://cdn.datatables.net/1.13.4/css/jquery.dataTables.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <style>
+    /* Đảm bảo phần bộ lọc luôn hiển thị */
+    .additional-filters {
+      margin: 20px 0;
+      display: block;
+    }
+
+    .filter-group {
+      display: flex;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group .form-group {
+      flex: 1;
+      min-width: 150px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar bg-dark text-white">
+    <div class="logo mb-4">
+      <i class="fa-solid fa-database me-2"></i> Action History
+    </div>
+    <a href="profile.html">
+      <i class="fa-solid fa-user me-2"></i> Profile
+    </a>
+    <a href="datasensor.html" >
+      <i class="fa-solid fa-database me-2"></i> Data Sensor
+    </a>
+    <a href="history.html" class="active">
+      <i class="fa-solid fa-history me-2" ></i> History
+    </a>
+    <a href="index.html">
+      <i class="fa-solid fa-tachometer-alt me-2"></i> Dashboard
+    </a>
+<a href="baocao.html" >
+            <i class="fa-solid fa-tachometer-alt me-2"></i> Báo cáo
+        </a>
+  </div>
+
+  <div class="main-content p-4">
+    <h1>Action history data</h1>
+
+    <!-- Các bộ lọc bổ sung -->
+    <div class="additional-filters" id="additionalFilters">
+      <div class="filter-group">
+        <div class="form-group">
+          <label for="filterType">Tìm kiếm theo</label>
+          <select class="form-control" id="filterType">
+            <option value="time">Thời Gian</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label for="filterValue">Nhập Giá Trị</label>
+          <input type="text" class="form-control" id="filterValue" placeholder="Nhập giá trị">
+        </div>
+      </div>
+      <button class="btn btn-primary mt-2" id="submitFilters">Tìm kiếm</button>
+
+    </div>
+
+    <table class="table table-striped" id="sensorTable">
+      <thead>
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Thiết bị</th>
+          <th scope="col">Trạng thái</th>
+          <th scope="col">Thời Gian</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Dữ liệu sẽ được chèn vào đây -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <script src="https://cdn.datatables.net/1.13.4/js/jquery.dataTables.min.js"></script>
+
+  <!-- Bootstrap JS and dependencies (Popper.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+  function formatDate(date) { 
+    if (!(date instanceof Date) || isNaN(date)) {
+      return "Ngày không hợp lệ";
+    }
+    const formattedDate = date.toLocaleDateString('vi-VN', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric'
+    });
+    const formattedTime = date.toLocaleTimeString('vi-VN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit'
+    });
+    return `${formattedDate} ${formattedTime}`;
+  }
+
+  // Chuyển đổi định dạng dd/MM/yyyy HH:mm:ss thành ISO format
+  function convertToISODate(dateString) {
+    const [datePart, timePart] = dateString.split(' ');
+    const [day, month, year] = datePart.split('/');
+    const [hour, minute, second] = timePart.split(':');
+    
+    // Tạo một đối tượng Date mà không có Z
+    const isoDateString = `${year}-${month}-${day}T${hour}:${minute}:${second}`;
+    return new Date(isoDateString).toISOString();
+  }
+
+  $(document).ready(function () {
+    const table = $('#sensorTable').DataTable({
+      columns: [
+        { data: 'id' },
+        { data: 'device' },
+        { data: 'status' },
+        { data: 'time' },
+      ],
+      language: {
+        url: "https://cdn.datatables.net/plug-ins/1.13.4/i18n/vi.json"
+      },
+      searching: false
+    });
+
+    function fetchData(filters = {}) {
+      $.ajax({
+        url: 'http://localhost:3000/api/action',
+        type: 'GET',
+        data: filters,
+        success: function (response) {
+          const data = response.map((item, index) => ({
+            id: index + 1,
+            device: item.device,
+            status: item.status,
+            time: formatDate(new Date(item.time))
+          }));
+          table.clear().rows.add(data).draw();
+        },
+        error: function (error) {
+          console.error('Lỗi khi gọi API:', error);
+        }
+      });
+    }
+
+    fetchData();
+
+    $('#submitFilters').on('click', function () {
+      const filterType = $('#filterType').val();
+      let filterValue = $('#filterValue').val();
+
+      const filters = {};
+      if (filterType && filterValue) {
+        if (filterType === 'time') {
+          // Chuyển đổi chuỗi thời gian thành ISO format
+          filterValue = convertToISODate(filterValue);
+        }
+        filters[filterType] = filterValue;
+      }
+
+      fetchData(filters);
+    });
+
+    $('#resetFilters').on('click', function () {
+      $('#filterType').val('temperature');
+      $('#filterValue').val('');
+      fetchData();
+    });
+  });
+</script>
+
+
+
+</body>
+
+</html>

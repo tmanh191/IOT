@@ -1,0 +1,90 @@
+/* CSS Profile cải tiến hơn, phong cách hiện đại */
+
+/* Thẻ Hồ Sơ */
+.body{
+background-color: bisque;
+}
+.profile-card {
+  /* background: linear-gradient(135deg, #a0756e, #122065); */
+  background: linear-gradient(200deg, rgb(18, 39, 49), rgb(86, 3, 116));
+  border-radius: 30px;
+  padding: 400px 400px;
+  height: 500px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.profile-card:hover {
+  transform: scale(1.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
+}
+
+/* Ảnh Hồ Sơ - Thêm hiệu ứng động */
+.profile-img-wrapper {
+  width: 130px;
+  height: 130px;
+  position: relative;
+  margin: 0 auto;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #400247, #f5576c);
+  padding: 5px;
+  animation: pulse 2s infinite ease-in-out;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+.profile-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+/* Tên Người Dùng */
+.profile-name {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #fff;
+}
+
+/* Chi Tiết Cá Nhân */
+.profile-details {
+  font-size: 1.1rem;
+  color: #f1f1f1;
+}
+
+/* Liên Kết Mạng Xã Hội */
+.social-links a {
+  transition: transform 0.2s ease, color 0.2s ease;
+}
+
+.social-links a:hover {
+  transform: scale(1.3);
+  color: #fff;
+}
+
+/* Nút Tùy Chỉnh */
+.btn-custom {
+  background-color: #1e90ff;
+  color: #fff;
+  border-radius: 50px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  transition: background-color 0.3s ease;
+  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+}
+
+.btn-custom:hover {
+  background-color: #1c7ed6;
+  box-shadow: 0 8px 20px rgba(0, 0, 0, 0.3);
+}

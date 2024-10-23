@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Dashboard</title>
+  <!-- Bootstrap CSS -->
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+  <!-- Font Awesome 6.4.0 -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/profile.css">
+
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar bg-dark text-white">
+    <div class="logo mb-4">
+      <i class="fa-solid fa-user me-2"></i> My Profile
+    </div>
+    <a href="profile.html" class="active">
+      <i class="fa-solid fa-user me-2"></i> Profile
+    </a>
+    <a href="datasensor.html">
+      <i class="fa-solid fa-database me-2"></i> Data Sensor
+    </a>
+    <a href="history.html">
+      <i class="fa-solid fa-history me-2"></i> History
+    </a>
+    <a href="index.html">
+      <i class="fa-solid fa-tachometer-alt me-2"></i> Dashboard
+    </a><a href="baocao.html" >
+            <i class="fa-solid fa-tachometer-alt me-2"></i> Báo cáo
+        </a>
+  </div>
+
+ <div class="main-content ">
+    <div class="container my-5">
+      <div class="row justify-content-center">
+        <div class="col-md-6">
+          <div class="card profile-card text-center shadow-lg p-4">
+            <div class="card-body">
+              <div class="profile-img-wrapper mb-3">
+                <img src="img/anh.jpg" alt="Ảnh Hồ Sơ" class="profile-img">
+              </div>
+              <h3 class="profile-name mb-1">Trần Trọng Mạnh</h3>
+              <p class="profile-details mb-1"><strong>Mã Sinh Viên:</strong> B21DCAT127</p>
+              <p class="profile-details mb-3"><strong>Email:</strong> trongmanhtt191@gmail.com</p>
+              <p class="profile-details mb-3"><strong>Giới thiệu:</strong> Sinh viên ngành An toàn thông tin tại Học viện Công nghệ Bưu chính Viễn thông</p>
+              <p class="profile-details mb-3"><strong>Số Điện Thoại:</strong> 0377 671 031</p>
+              <div class="social-links mb-4">
+               
+                <a href="/docs/IOT_API.pdf" target="_blank" class="text-danger" title="Doc pdf">
+                  <i class="fas fa-file-pdf fa-2x"></i>
+                </a>
+                 <a href="https://github.com/tmanh191" target="_blank" class="text-dark me-4" title="GitHub">
+                  <i class="fab fa-github fa-2x"></i>
+                </a>
+                <a href="/docs/IOT_doc.pdf" target="_blank" class="text-danger" title="API">
+                  <i class="fas fa-dochub fa-2x"></i>
+                </a>
+              </div>
+              <!-- <a href="/docs/yourdocument.pdf" target="_blank" class="btn btn-custom px-4 py-2">Tải PDF</a> -->
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS and dependencies (Popper.js) -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+  <!-- Socket.io Client -->
+
+<script>
+  // Lấy tất cả các liên kết
+  const links = document.querySelectorAll('.sidebar a');
+
+  // Lấy ID của từng liên kết
+  const currentPath = window.location.pathname.split("/").pop();
+
+  links.forEach(link => {
+    // Nếu đường dẫn trùng với href, thêm lớp 'active'
+    if (link.getAttribute('href') === currentPath) {
+      link.classList.add('active');
+    }
+
+    // Thêm sự kiện 'click' để chuyển lớp 'active' giữa các liên kết
+    link.addEventListener('click', () => {
+      links.forEach(l => l.classList.remove('active')); // Loại bỏ 'active' từ tất cả các liên kết
+      link.classList.add('active'); // Thêm 'active' vào liên kết vừa được click
+    });
+  });
+</script>
+
+</body>
+
